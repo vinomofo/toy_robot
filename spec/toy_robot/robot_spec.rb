@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 RSpec.describe ToyRobot::Robot do
+  let(:stubbed_table) { instance_double(ToyRobot::Table, valid_position?: true, valid_direction?: true) }
+  subject { ToyRobot::Robot.new(stubbed_table) }
+
   describe '#place' do
     context 'when given valid position and direction arguments' do
       before do
@@ -17,12 +20,20 @@ RSpec.describe ToyRobot::Robot do
     end
 
     context 'when given an invalid position argument' do
+      before do
+        allow(stubbed_table).to receive(:valid_position?).and_return(false)
+      end
+
       it 'raises an exception' do
         expect { subject.place(6, 0, 'NORTH') }.to raise_error(ToyRobot::PositionError)
       end
     end
 
     context 'when given an invalid direction argument' do
+      before do
+        allow(stubbed_table).to receive(:valid_direction?).and_return(false)
+      end
+
       it 'raises an exception' do
         expect { subject.place(0, 0, 'DOWN') }.to raise_error(ToyRobot::PositionError)
       end
@@ -32,6 +43,8 @@ RSpec.describe ToyRobot::Robot do
   describe '#move' do
     context 'when the robot has already been placed and is facing NORTH' do
       before do
+        allow(stubbed_table).to receive(:next_position).and_return [1, 0]
+
         subject.place(0, 0, 'NORTH')
       end
 
@@ -42,7 +55,7 @@ RSpec.describe ToyRobot::Robot do
       end
 
       it 'raises an error when attempting to move off the table' do
-        subject.place(4, 0, 'NORTH')
+        allow(stubbed_table).to receive(:valid_position?).and_return(false)
 
         expect { subject.move }.to raise_error(ToyRobot::PositionError)
       end

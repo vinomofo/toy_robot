@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 RSpec.describe ToyRobot::Table do
+  subject { ToyRobot::Table.new(width: 5, height: 5) }
+
   describe '#valid_position?' do
     it 'returns true when given a position that is on the table' do
       expect(subject.valid_position?(1, 2)).to be true
@@ -77,8 +79,6 @@ RSpec.describe ToyRobot::Table do
     end
 
     context 'when asked to go further than the edge of the table' do
-      subject { ToyRobot::Table.new(5) }
-
       it 'will return a value higher than the max' do
         north = 0
         east = 5
