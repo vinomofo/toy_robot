@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require_relative 'lib/toy_robot'
+require_relative 'lib/toy_robot/file_parser'
+
+command_parser = ToyRobot::CommandParser.new
+file_parser = ToyRobot::FileParser.new(command_parser, ARGV[0])
+file_parser.call
