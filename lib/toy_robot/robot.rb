@@ -1,7 +1,7 @@
 module ToyRobot
   class Robot
-    def initialize
-      @table = Table.new
+    def initialize(table = Table.new)
+      @table = table
       @directions = Table::DIRECTIONS.keys
     end
 

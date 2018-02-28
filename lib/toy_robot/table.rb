@@ -9,14 +9,13 @@ module ToyRobot
       'WEST' => Vector[0, -1]
     }.freeze
 
-    def initialize(table_size = 5)
-      @table_size = table_size
+    def initialize(height:, width:)
+      @height = height
+      @width = width
     end
 
     def valid_position?(north, east)
-      position = Vector.elements([north, east])
-
-      position.max < @table_size && position.min >= 0
+      (0...height).cover?(north) && (0...width).cover?(east)
     end
 
     def valid_direction?(direction)
@@ -30,6 +29,8 @@ module ToyRobot
     end
 
     private
+
+    attr_reader :width, :height
 
     def get_direction(dir)
       DIRECTIONS[dir]

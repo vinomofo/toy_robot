@@ -2,7 +2,23 @@
 
 require_relative 'lib/toy_robot'
 require_relative 'lib/toy_robot/file_parser'
+require 'optparse'
 
-command_parser = ToyRobot::CommandParser.new
+options = { width: 5, height: 5 }
+OptionParser.new do |opts|
+  opts.banner = "Usage: #{__FILE__}"
+
+  opts.on('-w', '--width WIDTH', Integer, 'Set the width of the table the robot is on. Default: 5') do |w|
+    options[:width] = w
+  end
+
+  opts.on('-h', '--height HEIGHT', Integer, 'Set the height of the table the robot is on. Default: 5') do |h|
+    options[:height] = h
+  end
+end.parse!
+
+table = ToyRobot::Table.new(width: options[:width], height: options[:height])
+robot = ToyRobot::Robot.new(table)
+command_parser = ToyRobot::CommandParser.new(robot)
 file_parser = ToyRobot::FileParser.new(command_parser, ARGV[0])
 file_parser.call
